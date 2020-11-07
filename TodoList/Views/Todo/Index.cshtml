@@ -1,0 +1,111 @@
+﻿@model TodoListViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="col-md-10">
+    <div class="jumbotron">
+        @if (TempData["success"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["success"]
+            </div>
+        }
+        @if (TempData["error"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["error"]
+            </div>
+        }
+        <h3>Todo Items</h3>
+        @if (Model.Todos.Count > 0)
+        {
+            <ul class="list-unstyled mt-3">
+                @foreach (var todo in Model.Todos)
+                {
+                    <li>
+                        @if (todo.IsCompleted)
+                        {
+                            <span class="badge badge-success"><i class="fa fa-check"></i></span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-danger"><i class="fa fa-times"></i></span>
+                        }
+
+                        <label class="" title="@todo.Title">@todo.Title</label> -
+                        <label class="" title="@todo.Description">@(todo.Description.Length > 35 ? todo.Description.Substring(0, 32) + "..." : todo.Description)</label> -
+                        @todo.Period
+                        <div class="float-right">
+                            @if (todo.IsCompleted == false)
+                            {
+                                <a href="/todo/complete/@todo.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Complete Task"><i class="fa fa-check"></i></a>
+                            }
+                            <a href="/todo/update/@todo.Id" class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Update Task"><i class="fa fa-edit"></i></a>
+                            <button class="btn btn-sm btn-outline-danger delete-button" data-todo="@todo.Id" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Delete Task"><i class="fa fa-times"></i></button>
+                        </div>
+                    </li>
+                    <hr />
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="alert alert-warning">There is no any todos. You can add by clicking <a href="/todo/add" class="">this</a></div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Todo Item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to delete todo item?</p>
+            </div>
+            <div class="modal-footer">
+                <a id="deleteInModal" href="" class="btn btn-danger">Delete</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Some error(s) accured!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('.delete-button').click(function () {
+            console.log("tet")
+            var todo = $(this).data('todo');
+            if (todo) {
+                $('#deleteInModal').attr('href', '/todo/delete/' + todo);
+                $('#deleteModal').modal('show');
+            }
+            else {
+                $('#errorModal').modal('show');
+            }
+        })
+    </script>
+}
