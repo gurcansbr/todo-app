@@ -13,7 +13,7 @@ namespace TodoList.DataAccess.Concrete.EntityFramework.Contexts
         {
             // db name - tododb
             // change server name
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-ELR7CTK\SQLEXPRESS;initial catalog=tododb;integrated security=true");
+            optionsBuilder.UseSqlServer(@"Server=CHANGE_ME;initial catalog=tododb;integrated security=true");
         }
 
         public DbSet<Todo> Todos { get; set; }
